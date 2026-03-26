@@ -1,11 +1,7 @@
-import React from 'react'
+import Home from "./pages/Home";
 
-const App = () => {
-  return (
-    <div>
-      <h1>Welcome to Latest Project related with AI</h1>
-    </div>
-  )
+function App() {
+  return <Home />;
 }
 
 export default App;
