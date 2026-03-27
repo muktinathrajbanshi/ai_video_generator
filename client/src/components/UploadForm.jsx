@@ -5,32 +5,20 @@ function UploadForm({ setVideo }) {
   const [image, setImage] = useState(null);
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
-  const [preview, setPreview] = useState(null); // <-- preview state
+  const [preview, setPreview] = useState(null); // preview selected image
 
-  const API_URL = import.meta.env.VITE_API_URL; // backend port
+  const API_URL = import.meta.env.VITE_API_URL; // your backend
 
-  const handleFileChange = (e) => {
+  const handleImageChange = (e) => {
     const file = e.target.files[0];
     setImage(file);
-
-    if (file) {
-      // Create a temporary URL to show image in UI
-      const fileURL = URL.createObjectURL(file);
-      setPreview(fileURL);
-    } else {
-      setPreview(null);
-    }
+    setPreview(URL.createObjectURL(file)); // live preview
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!image || !prompt) return alert("Upload image and enter prompt!");
     setLoading(true);
-
-    if (!image || !prompt) {
-      alert("Please upload an image and enter a prompt!");
-      setLoading(false);
-      return;
-    }
 
     try {
       const formData = new FormData();
@@ -44,35 +32,40 @@ function UploadForm({ setVideo }) {
       setVideo(res.data.videoUrl);
     } catch (err) {
       console.error(err);
-      alert("Video generation failed");
+      alert("Video generation failed (no real AI API yet)");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <form className="card" onSubmit={handleSubmit} style={{ maxWidth: "500px", margin: "20px auto" }}>
-      <input type="file" onChange={handleFileChange} required />
-      
+    <form onSubmit={handleSubmit} className="upload-card">
+      <h2>Upload Image & Enter Prompt</h2>
+
       {preview && (
-        <div style={{ margin: "10px 0", textAlign: "center" }}>
-          <p>Selected Image Preview:</p>
-          <img
-            src={preview}
-            alt="Preview"
-            style={{ maxWidth: "300px", maxHeight: "300px", border: "2px solid #ccc" }}
-          />
-        </div>
+        <img
+          src={preview}
+          alt="Preview"
+          style={{ maxWidth: "100%", marginBottom: "15px", borderRadius: "8px" }}
+        />
       )}
-      
+
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleImageChange}
+      />
+
       <input
         type="text"
-        placeholder="Enter prompt..."
+        placeholder="Enter your prompt..."
         value={prompt}
         onChange={(e) => setPrompt(e.target.value)}
-        required
       />
-      <button type="submit">{loading ? "Generating..." : "Generate Video"}</button>
+
+      <button type="submit" disabled={loading}>
+        {loading ? "Generating..." : "Generate Video"}
+      </button>
     </form>
   );
 }
