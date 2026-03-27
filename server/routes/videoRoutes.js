@@ -1,6 +1,6 @@
 const express = require("express");
 const multer = require("multer");
-const { generateVideo } = require("../controllers/videoController");
+const { generateVideo } = require("../controllers/videoControllers");
 
 const router = express.Router();
 const upload = multer({ dest: "uploads/" });
