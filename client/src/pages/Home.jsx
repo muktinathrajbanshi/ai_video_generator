@@ -1,17 +1,15 @@
-import Navbar from "../components/Navbar";
+import { useState } from "react";
 import UploadForm from "../components/UploadForm";
 import VideoPlayer from "../components/VideoPlayer";
-import { useState } from "react";
 
 function Home() {
   const [video, setVideo] = useState("");
-  const userId = "userId_placeholder"; // Replace with logged-in user ID
 
   return (
     <div>
-      <Navbar username="Muktinath" />
-      <UploadForm userId={userId} setVideo={setVideo} />
-      {video && <VideoPlayer video={video} />}
+      <h1 style={{ textAlign: "center", marginTop: "20px" }}>🎬 AI Image → Video Generator</h1>
+      <UploadForm setVideo={setVideo} />
+      <VideoPlayer video={video} />
     </div>
   );
 }
